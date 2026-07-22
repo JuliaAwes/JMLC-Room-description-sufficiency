@@ -48,37 +48,37 @@ ML-решение для классификации и детекции непо
 │ ├── ensemble exp.ipynb # Эксперименты с ансамблями
 │ └── bert-lgb.ipynb # Финальная мета-модель (stacking)
 
-## Архитектура решения
+# Архитектура решения
 
-# Базовая модель 1: DistilBERT (multilingual)
+## Базовая модель 1: DistilBERT (multilingual)
 - Модель: distilbert-base-multilingual-cased
 - Вход: нормализованный текст supplier_room_name (max_len=64)
 - Обучение: 9 эпох, AdamW, lr=2e-5, AMP (bf16/fp16)
 - Особенности: кастомный Collator, поиск порога по precision≥0.90
 
-# Базовая модель 2: LightGBM + LaBSE
+## Базовая модель 2: LightGBM + LaBSE
 - Фичи: 15 табличных фич (длина, языки, ключевые слова, hotel-статистики) + 768-мерные LaBSE-эмбеддинги
 - Обучение: 8-fold CV, early stopping по PR-AUC
 - Hotel-фичи: hotel_positive_rate, hotel_room_count, hotel_target_std (считаются без лика внутри каждого фолда)
 
-# Мета-модель: LightGBM-стекинг
+## Мета-модель: LightGBM-стекинг
 - Входы: bert_prob, lgb_prob, bert × lgb, |bert − lgb|
 - Обучение: 5-fold CV на holdout-выходах базовых моделей
 - Идея: модель учится доверять той базовой модели, которая в конкретной ситуации увереннее
 
 
-## Быстрый старт
+# Быстрый старт
 
-### 1. Установка зависимостей
+## 1. Установка зависимостей
 
 ```bash
 pip install -r requirements.txt
 ```
 
-# Скачивание артефактов
+## Скачивание артефактов
 В папке data/artefacts/ лежат .txt-файлы со ссылками на zip-архивы с обученными моделями. Скачайте и распакуйте их в models/:
 
-# Проверка модели (инференс)
+## Проверка модели (инференс)
 Самый быстрый способ — сразу получить submission на submission_sample.csv:
 python scripts/predict_meta_ensemble.py \
     --meta-model-path    models/meta_ensemble/meta_lgb_model.txt \
@@ -88,8 +88,8 @@ python scripts/predict_meta_ensemble.py \
     --output-path        submissions/meta_ensemble_submission.csv
 
 
-## Если хотите обучить всё с нуля:
-# Обучение DistilBERT
+# Если хотите обучить всё с нуля:
+## Обучение DistilBERT
 python scripts/train_distilmbert.py \
     --train-path   data/raw/public_dataset.csv \
     --test-path    data/raw/submission_sample.csv \
@@ -101,7 +101,7 @@ python scripts/train_distilmbert.py \
 - models/distilmbert/test_bert_probs.npy — вероятности на тесте
 - models/distilmbert/split_indices.npz — индексы сплита
 
-# Обучение LightGBM (8-fold + LaBSE)
+## Обучение LightGBM (8-fold + LaBSE)
 
 python scripts/train_lightgbm.py \
     --train-path    data/raw/public_dataset.csv \
@@ -115,7 +115,7 @@ python scripts/train_lightgbm.py \
 - models/lightgbm_labse/test_lgb_probs.npy — усреднённые вероятности на тесте
 - models/lightgbm_labse/oof_lgb_probs.npy — OOF-предсказания для мета-модели
 
-# Обучение мета-модели (stacking)
+## Обучение мета-модели (stacking)
 python scripts/train_meta_ensemble.py \
     --bert-holdout-probs  models/distilmbert/oof_bert_probs.npy \
     --bert-test-probs     models/distilmbert/test_bert_probs.npy \
@@ -129,7 +129,7 @@ python scripts/train_meta_ensemble.py \
 - models/meta_ensemble/meta_lgb_model.txt — финальная мета-модель
 - models/meta_ensemble/submission.csv — итоговый submission
 
-# Инференс на новых данных
+## Инференс на новых данных
 
 Python scripts/predict_meta_ensemble.py \
     --meta-model-path    models/meta_ensemble/meta_lgb_model.txt \
