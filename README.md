@@ -22,7 +22,6 @@ ML-решение для классификации и детекции непо
 
 ## Структура проекта
 ```
-.
 ├── README.md                          # Описание проекта и инструкции
 ├── requirements.txt                   # Python-зависимости
 ├── Dockerfile                         # Образ для воспроизводимого запуска
@@ -53,24 +52,6 @@ ML-решение для классификации и детекции непо
 │   ├── CatBoost_model.ipynb           # Эксперименты: CatBoost + BERT
 │   ├── ensemble exp.ipynb             # Эксперименты с ансамблями
 │   └── bert-lgb.ipynb                 # Финальная мета-модель (stacking)
-│
-├── models/                            # Обученные модели (не коммитятся)
-│   ├── distilmbert/
-│   │   ├── best_model.pt
-│   │   ├── tokenizer_config.json
-│   │   ├── test_bert_probs.npy
-│   │   └── split_indices.npz
-│   ├── lightgbm_labse/
-│   │   ├── lgb_fold_0.txt ... lgb_fold_7.txt
-│   │   ├── test_lgb_probs.npy
-│   │   └── oof_lgb_probs.npy
-│   └── meta_ensemble/
-│       ├── meta_lgb_model.txt
-│       └── meta_config.json
-│
-└── submissions/                       # Итоговые submission'ы
-    ├── lightgbm_submission.csv
-    └── meta_ensemble_submission.csv
 ```
 
 # Архитектура решения
