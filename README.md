@@ -19,34 +19,59 @@ ML-решение для классификации и детекции непо
 | **Meta (BERT + LGB)** | **0.962** | **0.963** |
 | Простое среднее BERT+LGB | 0.958 | — |
 
-'''
+
 ## Структура проекта
-├── README.md
-├── requirements.txt
-├── scripts/
-│ ├── train_distilmbert.py # Обучение DistilBERT
-│ ├── train_lightgbm.py # Обучение LightGBM (8-fold + LaBSE)
-│ ├── train_meta_ensemble.py # Обучение мета-модели (stacking)
-│ ├── predict_lightgbm.py # Инференс LightGBM на новых данных
-│ └── predict_meta_ensemble.py # Инференс мета-модели
+```
+.
+├── README.md                          # Описание проекта и инструкции
+├── requirements.txt                   # Python-зависимости
+├── Dockerfile                         # Образ для воспроизводимого запуска
+├── docker-compose.yml                 # Удобный запуск команд
+├── .dockerignore                      # Что не класть в Docker-образ
+├── .gitignore                         # Что не коммитить в Git
 │
-├── data/
-│ ├── raw/
-│ │ ├── public_dataset.csv # Обучающая выборка (~184k строк)
-│ │ └── submission_sample.csv # Тест для проверки модели (без таргета)
-│ └── artefacts/
-│ ├── bert_artefacts.txt # Ссылка на zip с BERT-артефактами
-│ ├── lgb_artefacts.txt # Ссылка на zip с LightGBM-артефактами
-│ └── meta_artefacts.txt # Ссылка на zip с мета-моделью
+├── scripts/                           # Переиспользуемые скрипты
+│   ├── train_distilmbert.py           # Обучение DistilBERT
+│   ├── train_lightgbm.py              # Обучение LightGBM (8-fold + LaBSE)
+│   ├── train_meta_ensemble.py         # Обучение мета-модели (stacking)
+│   ├── predict_lightgbm.py            # Инференс LightGBM на новых данных
+│   └── predict_meta_ensemble.py       # Инференс мета-модели
 │
-├── notebooks/
-│ ├── eda_t_bank.ipynb # EDA и визуализация данных
-│ ├── BERT_model.ipynb # Обучение DistilBERT (финальная версия)
-│ ├── LightGBM_model.ipynb # Обучение LightGBM (8-fold CV)
-│ ├── CatBoost_model.ipynb # Эксперименты: CatBoost + BERT
-│ ├── ensemble exp.ipynb # Эксперименты с ансамблями
-│ └── bert-lgb.ipynb # Финальная мета-модель (stacking)
-'''
+├── data/                              # Данные (не коммитятся в Git)
+│   ├── raw/
+│   │   ├── public_dataset.csv         # Обучающая выборка (~184k строк)
+│   │   └── submission_sample.csv      # Тест для проверки (без таргета)
+│   └── artefacts/
+│       ├── bert_artefacts.txt         # Ссылка на zip с BERT-весами
+│       ├── lgb_artefacts.txt          # Ссылка на zip с LightGBM-моделями
+│       └── meta_artefacts.txt         # Ссылка на zip с мета-моделью
+│
+├── notebooks/                         # Исследовательские ноутбуки
+│   ├── eda_t_bank.ipynb               # EDA и визуализация данных
+│   ├── BERT_model.ipynb               # Обучение DistilBERT (финальная версия)
+│   ├── LightGBM_model.ipynb           # Обучение LightGBM (8-fold CV)
+│   ├── CatBoost_model.ipynb           # Эксперименты: CatBoost + BERT
+│   ├── ensemble exp.ipynb             # Эксперименты с ансамблями
+│   └── bert-lgb.ipynb                 # Финальная мета-модель (stacking)
+│
+├── models/                            # Обученные модели (не коммитятся)
+│   ├── distilmbert/
+│   │   ├── best_model.pt
+│   │   ├── tokenizer_config.json
+│   │   ├── test_bert_probs.npy
+│   │   └── split_indices.npz
+│   ├── lightgbm_labse/
+│   │   ├── lgb_fold_0.txt ... lgb_fold_7.txt
+│   │   ├── test_lgb_probs.npy
+│   │   └── oof_lgb_probs.npy
+│   └── meta_ensemble/
+│       ├── meta_lgb_model.txt
+│       └── meta_config.json
+│
+└── submissions/                       # Итоговые submission'ы
+    ├── lightgbm_submission.csv
+    └── meta_ensemble_submission.csv
+```
 
 # Архитектура решения
 
